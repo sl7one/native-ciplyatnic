@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 export const DatePickerComponent = observer(() => {
   const { setIsOpenDatePicker, currentDate, isOpenDatePicker, handleSelect } = formDataStore;
+
   return (
     <>
       <View style={styles.container}>

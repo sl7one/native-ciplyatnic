@@ -1,40 +1,30 @@
-import Icon from 'react-native-vector-icons/AntDesign';
-import { Modal, StyleSheet, TouchableHighlight, View } from 'react-native';
-import { text, modalView, theme } from '../utils/mainStyles';
-import { ModalButtons } from './ModalButtons';
+import { View, Modal, StyleSheet } from 'react-native';
 import { DatePickerComponent } from './DatePicker';
 import { FormDataInputs } from './FormDataInputs';
-import { ProductPicker } from './ProductPicker';
 import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react-native';
 import { ProductHeader } from './ProductHeader';
-import { observer } from 'mobx-react-lite';
+import { ProductPicker } from './ProductPicker';
+import { ModalButtons } from './ModalButtons';
 import { formDataStore } from '../store/formDataStore';
-import ToastManager from 'toastify-react-native';
+import { text, modalView } from '../utils/mainStyles';
+import { observer } from 'mobx-react-lite';
 
-export const AddOrder = observer(() => {
-  const { isExpanded, setIsExpanded, setIsOpenAddItem, handleSubmitAddOrder, isOpenAddOrder } =
+export const EditFormModal = observer(() => {
+  const { isExpanded, setIsExpanded, setIsOpenEditForm, handleUpdateOrder, isOpenEditForm } =
     formDataStore;
 
   const onPressPositiveBtn = () => {
-    handleSubmitAddOrder();
+    handleUpdateOrder();
   };
 
   const onPressNegativeBtn = () => {
-    setIsOpenAddItem(false);
+    setIsOpenEditForm(false);
   };
 
   return (
     <>
-      <TouchableHighlight
-        style={{ marginRight: 20 }}
-        underlayColor={theme.colors.underlayColor}
-        activeOpacity={theme.colors.activeOpacity}
-        onPress={() => setIsOpenAddItem(true)}
-      >
-        <Icon name="plussquareo" size={24} color={theme.colors.positiveButton} />
-      </TouchableHighlight>
       <View>
-        <Modal animationType="slide" transparent={true} visible={isOpenAddOrder}>
+        <Modal animationType="slide" transparent={true} visible={isOpenEditForm}>
           <View style={styles.container}>
             <View style={styles.modalView}>
               <DatePickerComponent />
@@ -66,14 +56,8 @@ export const AddOrder = observer(() => {
               </Collapse>
 
               <ModalButtons
-                positiveBtn={{ title: 'Добавить', fn: onPressPositiveBtn }}
+                positiveBtn={{ title: 'Изменить', fn: onPressPositiveBtn }}
                 negativeBtn={{ title: 'Закрыть', fn: onPressNegativeBtn }}
-              />
-              <ToastManager
-                position="center"
-                duration={1500}
-                backdropColor="black"
-                backdropOpacity={0.2}
               />
             </View>
           </View>

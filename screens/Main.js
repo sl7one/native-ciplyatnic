@@ -4,15 +4,28 @@ import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'rea
 import { container, text, theme } from '../utils/mainStyles';
 import { categoriesStore } from '../store/categoriesStore';
 import { Loader } from '../components/Loader';
+import { ordersStore } from '../store/ordersStore';
 
 export const Main = observer(({ navigation }) => {
-  const { getAll, isLoading } = categoriesStore;
+  const { getAllCategories, isLoading: isLoadingCategories } = categoriesStore;
+  const {
+    getAllOrders,
+    getAllPurchaseOrders,
+    getAllSalledOrders,
+    isLoading: isLoadingData,
+  } = ordersStore;
 
   useEffect(() => {
-    getAll();
+    getAllCategories();
+    getAllOrders();
+    getAllPurchaseOrders();
+    getAllSalledOrders();
   }, []);
 
-  if (isLoading) {
+  if (isLoadingCategories) {
+    return <Loader title="Подождите, загружаем интерфейс..." />;
+  }
+  if (isLoadingData) {
     return <Loader />;
   }
 

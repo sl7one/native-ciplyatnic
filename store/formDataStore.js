@@ -6,12 +6,14 @@ import { Toast } from 'toastify-react-native';
 class FormDataStore {
   isOpenDatePicker = false;
   isOpenAddOrder = false;
+  isOpenEditForm = false;
+  id = '';
   currentDate = new Date();
   inputs = { name: '', phone: '', location: '' };
   poultry = [];
   food = [];
   options = [];
-  isExpanded = { poultry: false, food: false, options: false };
+  isExpanded = { poultry: true, food: false, options: false };
   initPoultry = { id: '', type: 'Птица', count: 0, price: 0 };
   initFood = { id: '', type: 'Корм', count: 0, price: 0 };
   initOptions = { id: '', type: 'Доп', count: 0, price: 0 };
@@ -20,16 +22,35 @@ class FormDataStore {
     makeAutoObservable(this, {}, { autoBind: true, deep: true });
   }
 
-  setDate(date) {
-    this.currentDate = new Date(date);
-  }
-
   setIsOpenDatePicker(bool) {
     this.isOpenDatePicker = bool;
   }
 
   setIsOpenAddItem(bool) {
     this.isOpenAddOrder = bool;
+  }
+
+  setIsOpenEditForm(bool, item) {
+    this.isOpenEditForm = bool;
+    this.isExpanded = { poultry: true, food: false, options: false };
+
+    if (!item) {
+      this.resetForm();
+      return;
+    }
+
+    const { _id, active, date, order, total } = item;
+    const { buyer, saller, data, food, options } = order;
+    const person = buyer || saller;
+    const { name, location, phone } = person;
+    this.id = _id;
+    this.currentDate = new Date(Date.parse(date));
+    this.poultry = data;
+    this.food = food;
+    this.options = options;
+    this.inputs.name = name;
+    this.inputs.phone = phone;
+    this.inputs.location = location;
   }
 
   handleSelect({ nativeEvent, type }) {
@@ -133,7 +154,7 @@ class FormDataStore {
     item[itemType] = value;
   }
 
-  handleSubmitAddOrder() {
+  async handleSubmitAddOrder() {
     const { addOrder } = ordersStore;
 
     const isInvalid =
@@ -144,7 +165,7 @@ class FormDataStore {
       return;
     }
 
-    addOrder({
+    await addOrder({
       date: this.currentDate,
       order: {
         buyer: {
@@ -157,12 +178,44 @@ class FormDataStore {
         options: this.options,
       },
     });
+
+    this.resetForm();
+  }
+
+  async handleUpdateOrder() {
+    const { updateOrder } = ordersStore;
+
+    const isInvalid =
+      !this.inputs.name || !this.inputs.phone || !this.inputs.location || !this.poultry.length;
+
+    if (isInvalid) {
+      Toast.error('Не валидные поля');
+      return;
+    }
+
+    await updateOrder(this.id, {
+      date: this.currentDate,
+      order: {
+        buyer: {
+          name: this.inputs.name,
+          phone: this.inputs.phone,
+          location: this.inputs.location,
+        },
+        data: this.poultry,
+        food: this.food,
+        options: this.options,
+      },
+    });
+
+    this.resetForm();
+    this.setIsOpenEditForm(false);
   }
 
   resetForm() {
     this.isOpenDatePicker = false;
     this.isOpenAddOrder = false;
     this.currentDate = new Date();
+    this.id = '';
     this.inputs = { name: '', phone: '', location: '' };
     this.poultry = [];
     this.food = [];

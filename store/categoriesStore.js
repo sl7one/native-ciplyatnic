@@ -12,7 +12,7 @@ class CategoriesStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async getAll() {
+  async getAllCategories() {
     try {
       this.isLoading = true;
       const { data } = await axios.get('/categories');
