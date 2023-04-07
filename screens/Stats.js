@@ -2,9 +2,32 @@ import { observer } from 'mobx-react-lite';
 import { StyleSheet, View, Text } from 'react-native';
 import { ordersStore } from '../store/ordersStore';
 import { theme, text } from '../utils/mainStyles';
+import { useEffect } from 'react';
 
-export const Stats = observer(() => {
-  const { orders } = ordersStore;
+export const Stats = observer(({ navigation, route }) => {
+  const options = type => {
+    const { orders, salledOrders } = ordersStore;
+    switch (type) {
+      case 'orders':
+        return { headerStyleBackgroundColor: theme.colors.orderLink, list: orders };
+      case 'salles':
+        return { headerStyleBackgroundColor: theme.colors.salleLink, list: salledOrders };
+      default:
+        return null;
+    }
+  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: options(route.params.type).headerStyleBackgroundColor,
+      },
+    });
+  }, []);
+
+  const list = options(route.params.type).list;
+
+  console.log(list);
+
   let totalSumm = 0;
   let totalPoultry = [];
   let totalFood = [];
@@ -12,7 +35,7 @@ export const Stats = observer(() => {
   let totalPoultryCount = 0;
   let totalFoodCount = 0;
 
-  orders.forEach(({ order }) => {
+  list.forEach(({ order }) => {
     const { total, data, food, options } = order;
     totalSumm += total;
     totalPoultry = [...totalPoultry, ...data];
@@ -139,7 +162,7 @@ export const Stats = observer(() => {
               <Text>Всего заказов</Text>
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <Text style={{ fontWeight: 600, color: 'red' }}>{orders.length} </Text>
+              <Text style={{ fontWeight: 600, color: 'red' }}>{list.length} </Text>
             </View>
             <View style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }}>
               <Text>шт</Text>

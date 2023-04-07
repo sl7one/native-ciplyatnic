@@ -67,7 +67,7 @@ const App = () => {
           options={{
             ...headerOptions,
             headerStyle: {
-              backgroundColor: theme.colors.salleLink,
+              backgroundColor: theme.colors.orderLink,
             },
             title: 'Статистика',
             headerRight: null,

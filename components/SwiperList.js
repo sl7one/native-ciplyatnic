@@ -6,7 +6,6 @@ import { ordersStore } from '../store/ordersStore';
 import { text, theme } from '../utils/mainStyles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { formDataStore } from '../store/formDataStore';
-// import {nanoid}
 
 function SwiperList({ type }) {
   const options = type => {

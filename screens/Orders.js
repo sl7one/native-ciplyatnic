@@ -20,7 +20,7 @@ export const Orders = observer(({ navigation }) => {
             style={styles.btn}
             underlayColor={theme.colors.underlayColor}
             activeOpacity={theme.colors.activeOpacity}
-            onPress={() => navigation.navigate('Stats')}
+            onPress={() => navigation.navigate('Stats', { type: 'orders' })}
           >
             <Ionicons name="stats-chart" size={35} color={theme.colors.positiveButton} />
           </TouchableHighlight>
