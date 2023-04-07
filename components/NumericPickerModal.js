@@ -8,35 +8,32 @@ export const NumericPickerModal = observer(() => {
   const { number, setIsOpenCount, isOpenCount } = modalNumbersStore;
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={true} visible={isOpenCount}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.currentNumber}>
-              <Text style={{ ...styles.text, fontSize: 30 }}>{!number ? 0 : number}</Text>
-            </View>
-            <NumbersList />
-            <TouchableHighlight
-              style={styles.button}
-              activeOpacity={0.9}
-              underlayColor="rgba(0,0,0,0.05)"
-              onPress={() => setIsOpenCount(false)}
-            >
-              <Text style={styles.text}>Закрыть</Text>
-            </TouchableHighlight>
+    <Modal animationType="slide" transparent={true} visible={isOpenCount}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <View style={styles.currentNumber}>
+            <Text style={{ ...styles.text, fontSize: 30 }}>{!number ? 0 : number}</Text>
           </View>
+          <NumbersList />
+          <TouchableHighlight
+            style={styles.button}
+            activeOpacity={0.9}
+            underlayColor="rgba(0,0,0,0.05)"
+            onPress={() => setIsOpenCount(false)}
+          >
+            <Text style={styles.text}>Закрыть</Text>
+          </TouchableHighlight>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 });
 
 const styles = StyleSheet.create({
   text,
   currentNumber: {
-    height: '20%',
+    flex: 1,
     width: '100%',
-    // paddingVertical: 40,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0, 0.05)',
     alignItems: 'flex-end',
@@ -44,18 +41,19 @@ const styles = StyleSheet.create({
     paddingRight: 30,
   },
   centeredView: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
+    flex: 1,
     width: '100%',
     flexDirection: 'column',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
     backgroundColor: 'white',
   },
   button: {
-    height: '20%',
+    flex: 1,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',

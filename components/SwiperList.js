@@ -6,6 +6,7 @@ import { ordersStore } from '../store/ordersStore';
 import { text, theme } from '../utils/mainStyles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { formDataStore } from '../store/formDataStore';
+// import {nanoid}
 
 function SwiperList({ type }) {
   const options = type => {
@@ -48,8 +49,8 @@ function SwiperList({ type }) {
   const listData = [...options(type).list]
     .sort(({ date: dateA }, { date: dateB }) => Date.parse(dateB) - Date.parse(dateA))
     .map((item, i) => {
-      const { _id, active, date, order, total } = item;
-      const { buyer, saller, data, food, options } = order;
+      const { _id, active, date, order } = item;
+      const { buyer, saller, data, food, options, total } = order;
       const person = buyer || saller;
       const { name, location, phone } = person;
 
@@ -57,13 +58,19 @@ function SwiperList({ type }) {
         key: `${_id}`,
         name,
         date,
+        phone,
+        location,
+        data,
+        food,
+        options,
+        total,
       };
     });
 
   const deleteItem = async (_, rowKey) => {
     const { removeOrder, updateSalledOrder } = ordersStore;
     const [item] = options(type).list.filter(el => el._id === rowKey);
-    type === 'orders' ? await removeOrder(item._id) : await updateSalledOrder(item.id);
+    type === 'orders' ? await removeOrder(item._id) : await updateSalledOrder(item._id);
   };
 
   const saleItem = async (_, rowKey) => {
@@ -85,11 +92,69 @@ function SwiperList({ type }) {
         activeOpacity={theme.activeOpacity}
         underlayColor={theme.colors.underlayColor}
       >
-        <View style={{ flexDirection: 'row', padding: 10 }}>
-          <Text style={{ ...styles.text, width: '50%' }}>{data.item.name}</Text>
-          <Text style={{ ...styles.text, width: '50%', textAlign: 'right' }}>
-            {moment(data.item.date).format('D MM / YY')}
-          </Text>
+        <View>
+          <View style={styles.headerItem}>
+            <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+              <Text style={{ ...styles.text }}>{data.item.name}</Text>
+              <Text style={{ ...styles.text, fontWeight: 600 }}>{data.item.phone}</Text>
+            </View>
+            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+              <Text style={{ ...styles.text }}>{moment(data.item.date).format('DD MM / YY')}</Text>
+              <Text style={{ ...styles.text, fontWeight: 600 }}>{data.item.location}</Text>
+            </View>
+          </View>
+          <View style={{ padding: 10 }}>
+            <View style={{ marginTop: 5 }}>
+              {data.item.data.map(el => (
+                <View style={{ flexDirection: 'row' }} key={el.type}>
+                  <Text style={{ ...styles.text, flex: 2, fontSize: 14 }}>{el.type}</Text>
+                  <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                    {el.count} шт
+                  </Text>
+                  <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                    {el.price} грн
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            {!!data.item.food && (
+              <View style={{ marginTop: 5 }}>
+                {data.item.food.map(el => (
+                  <View style={{ flexDirection: 'row' }} key={el.type}>
+                    <Text style={{ ...styles.text, flex: 2, fontSize: 14 }}>{el.type}</Text>
+                    <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                      {el.count} шт
+                    </Text>
+                    <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                      {el.price} грн
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+            {!!data.item.options && (
+              <View style={{ marginTop: 5 }}>
+                {data.item.options.map(el => (
+                  <View style={{ flexDirection: 'row' }} key={el.type}>
+                    <Text style={{ ...styles.text, flex: 2, fontSize: 14 }}>{el.type}</Text>
+                    <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                      {el.count} шт
+                    </Text>
+                    <Text style={{ ...styles.text, flex: 0.5, fontSize: 14, textAlign: 'right' }}>
+                      {el.price} грн
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+          <View style={{ justifyContent: 'space-between', flexDirection: 'row', padding: 10 }}>
+            <Text style={{ ...styles.text, fontWeight: 600 }}>Итого</Text>
+            <Text style={{ ...styles.text, fontWeight: 600, color: 'red' }}>
+              {data.item.total} грн
+            </Text>
+          </View>
         </View>
       </TouchableHighlight>
     );
@@ -156,21 +221,22 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   rowFront: {
-    alignItems: 'center',
+    flex: 1,
     backgroundColor: 'white',
     borderBottomColor: theme.colors.borderColor,
     borderBottomWidth: 1,
     justifyContent: 'center',
-    height: 50,
   },
   rowBack: {
     alignItems: 'center',
     backgroundColor: theme.colors.positiveButton,
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    height: '100%',
   },
   btn: {
+    height: '100%',
     alignItems: 'center',
     bottom: 0,
     justifyContent: 'center',
@@ -181,6 +247,12 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.borderColor,
     borderWidth: 0.5,
     borderBottomWidth: 1,
+  },
+  headerItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    padding: 10,
   },
 });
 

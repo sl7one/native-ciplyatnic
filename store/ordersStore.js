@@ -77,8 +77,11 @@ class OrdersStore {
   async salleOrder(id) {
     try {
       this.isLoading = true;
-      await axios.patch(`/orders/${id}`);
-      runInAction(() => (this.orders = this.orders.filter(el => el._id !== id)));
+      const { data } = await axios.patch(`/orders/${id}`);
+      runInAction(() => {
+        this.orders = this.orders.filter(el => el._id !== id);
+        this.salledOrders.unshift(data.data.result);
+      });
     } catch (e) {
       runInAction(() => (this.error = e.message));
     } finally {

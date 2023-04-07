@@ -35,18 +35,10 @@ export const mainBox = {
 
 export const modalView = {
   flex: 1,
-  height: 700,
   margin: 5,
   backgroundColor: 'white',
   borderRadius: 10,
   padding: 10,
-  shadowColor: '#000',
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 4,
 };
 
 export const input = {

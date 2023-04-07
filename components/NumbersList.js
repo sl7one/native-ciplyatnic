@@ -42,10 +42,9 @@ export const NumbersList = observer(() => {
 const styles = StyleSheet.create({
   text,
   numbersContainer: {
-    height: '60%',
+    width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'flex-end',
   },
 });

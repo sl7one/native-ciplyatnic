@@ -10,6 +10,9 @@ import { ProductHeader } from './ProductHeader';
 import { observer } from 'mobx-react-lite';
 import { formDataStore } from '../store/formDataStore';
 import ToastManager from 'toastify-react-native';
+import { NumericPickerModal } from './NumericPickerModal';
+import { ProductPickerModal } from './ProductPickerModal';
+import { EditFormModal } from './EditFormModal';
 
 export const AddOrder = observer(() => {
   const { isExpanded, setIsExpanded, setIsOpenAddItem, handleSubmitAddOrder, isOpenAddOrder } =
@@ -33,52 +36,53 @@ export const AddOrder = observer(() => {
       >
         <Icon name="plussquareo" size={24} color={theme.colors.positiveButton} />
       </TouchableHighlight>
-      <View>
-        <Modal animationType="slide" transparent={true} visible={isOpenAddOrder}>
-          <View style={styles.container}>
-            <View style={styles.modalView}>
-              <DatePickerComponent />
-              <FormDataInputs />
+      <Modal animationType="slide" transparent={true} visible={isOpenAddOrder}>
+        <View style={styles.container}>
+          <View style={styles.modalView}>
+            <DatePickerComponent />
+            <FormDataInputs />
 
-              <Collapse isExpanded={isExpanded.poultry} onToggle={() => setIsExpanded('poultry')}>
-                <CollapseHeader>
-                  <ProductHeader title="Добавить птицу" type="poultry" />
-                </CollapseHeader>
-                <CollapseBody>
-                  <ProductPicker type="poultry" />
-                </CollapseBody>
-              </Collapse>
-              <Collapse isExpanded={isExpanded.food} onToggle={() => setIsExpanded('food')}>
-                <CollapseHeader>
-                  <ProductHeader title="Добавить корм" type="food" />
-                </CollapseHeader>
-                <CollapseBody>
-                  <ProductPicker type="food" />
-                </CollapseBody>
-              </Collapse>
-              <Collapse isExpanded={isExpanded.options} onToggle={() => setIsExpanded('options')}>
-                <CollapseHeader>
-                  <ProductHeader title="Дополнительно" type="options" />
-                </CollapseHeader>
-                <CollapseBody>
-                  <ProductPicker type="options" />
-                </CollapseBody>
-              </Collapse>
+            <Collapse isExpanded={isExpanded.poultry} onToggle={() => setIsExpanded('poultry')}>
+              <CollapseHeader>
+                <ProductHeader title="Добавить птицу" type="poultry" />
+              </CollapseHeader>
+              <CollapseBody>
+                <ProductPicker type="poultry" />
+              </CollapseBody>
+            </Collapse>
+            <Collapse isExpanded={isExpanded.food} onToggle={() => setIsExpanded('food')}>
+              <CollapseHeader>
+                <ProductHeader title="Добавить корм" type="food" />
+              </CollapseHeader>
+              <CollapseBody>
+                <ProductPicker type="food" />
+              </CollapseBody>
+            </Collapse>
+            <Collapse isExpanded={isExpanded.options} onToggle={() => setIsExpanded('options')}>
+              <CollapseHeader>
+                <ProductHeader title="Дополнительно" type="options" />
+              </CollapseHeader>
+              <CollapseBody>
+                <ProductPicker type="options" />
+              </CollapseBody>
+            </Collapse>
 
-              <ModalButtons
-                positiveBtn={{ title: 'Добавить', fn: onPressPositiveBtn }}
-                negativeBtn={{ title: 'Закрыть', fn: onPressNegativeBtn }}
-              />
-              <ToastManager
-                position="center"
-                duration={1500}
-                backdropColor="black"
-                backdropOpacity={0.2}
-              />
-            </View>
+            <ModalButtons
+              positiveBtn={{ title: 'Добавить', fn: onPressPositiveBtn }}
+              negativeBtn={{ title: 'Закрыть', fn: onPressNegativeBtn }}
+            />
+            <ToastManager
+              position="center"
+              duration={1500}
+              backdropColor="black"
+              backdropOpacity={0.2}
+            />
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
+      <NumericPickerModal />
+      <ProductPickerModal />
+      <EditFormModal />
     </>
   );
 });
@@ -86,8 +90,6 @@ export const AddOrder = observer(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%',
-    width: '100%',
   },
   toastify: {
     flex: 1,

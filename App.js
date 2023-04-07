@@ -6,6 +6,7 @@ import { Orders } from './screens/Orders';
 import { Main } from './screens/Main';
 import { AddOrder } from './components/AddOrder';
 import { theme } from './utils/mainStyles';
+import { Stats } from './screens/Stats';
 
 const MainStack = createStackNavigator();
 
@@ -60,6 +61,18 @@ const App = () => {
             title: 'Продажи',
           }}
           component={Salles}
+        />
+        <MainStack.Screen
+          name="Stats"
+          options={{
+            ...headerOptions,
+            headerStyle: {
+              backgroundColor: theme.colors.salleLink,
+            },
+            title: 'Статистика',
+            headerRight: null,
+          }}
+          component={Stats}
         />
       </MainStack.Navigator>
     </NavigationContainer>
